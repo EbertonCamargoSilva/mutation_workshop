@@ -6,24 +6,28 @@ import '../cubit/todo_cubit.dart';
 class TodoItem extends StatelessWidget {
   final TodoModel todo;
 
-  const TodoItem({required this.todo});
+  const TodoItem({super.key, required this.todo});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Checkbox(
-        value: todo.isCompleted,
-        onChanged: (_) => context.read<TodoCubit>().toggleTodo(todo),
-      ),
-      title: Text(
-        todo.title,
-        style: TextStyle(
-          decoration: todo.isCompleted ? TextDecoration.lineThrough : null,
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ListTile(
+        leading: Checkbox(
+          value: todo.isCompleted,
+          onChanged: (_) => context.read<TodoCubit>().toggleTodo(todo),
         ),
-      ),
-      trailing: IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: () => context.read<TodoCubit>().deleteTodo(todo.id),
+        title: Text(
+          todo.title,
+          style: TextStyle(
+            decoration: todo.isCompleted ? TextDecoration.lineThrough : null,
+            color: todo.isCompleted ? Colors.grey : null,
+          ),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.delete, color: Colors.red),
+          onPressed: () => context.read<TodoCubit>().deleteTodo(todo.id),
+        ),
       ),
     );
   }

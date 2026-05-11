@@ -6,17 +6,23 @@ import 'src/presentation/cubit/todo_cubit.dart';
 import 'src/presentation/screen/todo_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     final repository = TodoRepositoryImpl();
     final usecase = TodoUsecase(repository: repository);
 
     return MaterialApp(
-      title: 'Todo List',
+      title: 'Todo List App',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
       home: BlocProvider(
         create: (context) => TodoCubit(usecase)..loadTodos(),
         child: TodoScreen(),

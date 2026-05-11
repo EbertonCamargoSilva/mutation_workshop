@@ -7,22 +7,31 @@ import '../widgets/todo_item.dart';
 class TodoScreen extends StatelessWidget {
   final _controller = TextEditingController();
 
+  TodoScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Todo List')),
+      appBar: AppBar(
+        title: const Text('Todo List'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(hintText: 'Add todo'),
+                    decoration: const InputDecoration(
+                      hintText: 'Add todo',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 IconButton(
                   onPressed: () {
                     if (_controller.text.isNotEmpty) {
@@ -30,7 +39,7 @@ class TodoScreen extends StatelessWidget {
                       _controller.clear();
                     }
                   },
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                 ),
               ],
             ),
@@ -39,11 +48,28 @@ class TodoScreen extends StatelessWidget {
             child: BlocBuilder<TodoCubit, TodoState>(
               builder: (context, state) {
                 if (state.isLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 
                 if (state.errorMessage != null) {
-                  return Center(child: Text('Error: ${state.errorMessage}'));
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Error: ${state.errorMessage}'),
+                        ElevatedButton(
+                          onPressed: () => context.read<TodoCubit>().loadTodos(),
+                          child: const Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+                
+                if (state.todos.isEmpty) {
+                  return const Center(
+                    child: Text('No todos yet. Add one above!'),
+                  );
                 }
                 
                 return ListView.builder(
