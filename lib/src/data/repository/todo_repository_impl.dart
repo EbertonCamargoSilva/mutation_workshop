@@ -5,6 +5,12 @@ class TodoRepositoryImpl implements TodoRepository {
   static final List<TodoModel> _todos = [];
   static int _nextId = 1;
 
+  /// Reset para testes
+  static void reset() {
+    _todos.clear();
+    _nextId = 1;
+  }
+
   @override
   Future<List<TodoModel>> getTodos() async {
     return List.from(_todos);

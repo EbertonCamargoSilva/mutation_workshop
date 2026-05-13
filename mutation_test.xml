@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mutations version="1.1">
+  <files>
+    <file>lib/src/domain/usecases/todo_usecase.dart</file>
+  </files>
+  
+  <commands>
+    <command expected-return="0" timeout="60">
+      flutter test test/src/domain/usecases/todo_usecase_mutation_test.dart
+    </command>
+  </commands>
+  
+  <rules>
+    <!-- Operadores relacionais -->
+    <literal text="==" id="op.eq">
+      <mutation text="!="/>
+    </literal>
+    <literal text="!=" id="op.neq">
+      <mutation text="=="/>
+    </literal>
+    <literal text="&gt;" id="op.gt">
+      <mutation text="&gt;="/>
+      <mutation text="&lt;"/>
+    </literal>
+    <literal text="&lt;" id="op.lt">
+      <mutation text="&lt;="/>
+      <mutation text="&gt;"/>
+    </literal>
+    <literal text="&gt;=" id="op.gte">
+      <mutation text="&gt;"/>
+      <mutation text="&lt;="/>
+    </literal>
+    <literal text="&lt;=" id="op.lte">
+      <mutation text="&lt;"/>
+      <mutation text="&gt;="/>
+    </literal>
+    
+    <!-- Operadores lógicos -->
+    <literal text="&amp;&amp;" id="op.and">
+      <mutation text="||"/>
+    </literal>
+    <literal text="||" id="op.or">
+      <mutation text="&amp;&amp;"/>
+    </literal>
+    
+    <!-- Valores literais -->
+    <literal text="null" id="null">
+      <mutation text="0"/>
+    </literal>
+    <literal text="true" id="bool.true">
+      <mutation text="false"/>
+    </literal>
+    <literal text="false" id="bool.false">
+      <mutation text="true"/>
+    </literal>
+    
+    <!-- Operadores aritméticos -->
+    <regex pattern="\+([^=+])" id="arith.add">
+      <mutation text="-$1"/>
+    </regex>
+    <regex pattern="-([^=-])" id="arith.sub">
+      <mutation text="+$1"/>
+    </regex>
+    <regex pattern="\*([^=])" id="arith.mul">
+      <mutation text="/$1"/>
+    </regex>
+    <regex pattern="/([^=])" id="arith.div">
+      <mutation text="*$1"/>
+    </regex>
+    
+    <!-- Negação condicional -->
+    <regex pattern="if\s*\(\s*([^)]+)\s*\)" id="cond.if">
+      <mutation text="if (!($1))"/>
+    </regex>
+    
+    <!-- Strings vazias -->
+    <literal text='""' id="string.empty">
+      <mutation text='"test"'/>
+    </literal>
+    
+    <!-- Números -->
+    <literal text="0" id="num.zero">
+      <mutation text="1"/>
+    </literal>
+    <literal text="1" id="num.one">
+      <mutation text="0"/>
+    </literal>
+  </rules>
+  
+  <exclude>
+    <token begin="//" end="\n"/>
+    <token begin="import '" end="';"/>
+    <token begin="export '" end="';"/>
+    <regex pattern="/[*].*?[*]/" dotAll="true"/>
+  </exclude>
+  
+  <threshold failure="80">
+    <rating over="95" name="A"/>
+    <rating over="80" name="B"/>
+    <rating over="60" name="C"/>
+  </threshold>
+</mutations>
